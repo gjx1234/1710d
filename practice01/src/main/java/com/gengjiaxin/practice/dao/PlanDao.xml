@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gengjiaxin.practice.dao.PlanDao">
+	<insert id="addDepartments">
+		insert into zhunneng_department values
+		<foreach collection="departments" separator="," item="d">
+			(default,#{d})
+		</foreach>
+	</insert>
+
+	<select id="selectDept" resultType="Integer">
+		select id from
+		zhunneng_department where name = #{deptName}
+	</select>
+
+	<insert id="addPlan">
+		insert into zhunneng_2019plan values
+		<foreach collection="plans" separator="," item="p">
+			(default,#{p.name},#{p.amount},#{p.manager},#{p.content},#{p.dept_id})
+		</foreach>
+	</insert>
+
+	<resultMap type="Plan" id="planMap">
+		<id property="id" column="id"></id>
+		<result property="name" column="name" />
+		<result property="amount" column="amount" />
+		<result property="manager" column="manager" />
+		<result property="content" column="content" />
+		<association property="department" javaType="Department">
+			<id property="id" column="did"></id>
+		<result property="name" column="deptname" />
+		</association>
+	</resultMap>
+	<select id="selectPlans" resultMap="planMap">
+		select p.*,d.id did,d.name deptname from zhunneng_2019plan p join
+		zhunneng_department d on p.dept_id = d.id
+		<where>
+			<if test="name!='' and null!=name">
+				and p.name like '%${name}%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectOne" resultMap="planMap">
+		select p.*,d.id did,d.name deptname from zhunneng_2019plan p join
+		zhunneng_department d on p.dept_id = d.id where p.id = #{id}
+	</select>
+	
+	<select id="selectDepts" resultType="Department">
+		select * from zhunneng_department
+	</select>
+	
+	<insert id="add">
+		insert into zhunneng_2019plan values
+		(null,#{name},#{amount},#{manager},#{content},#{dept_id})
+	</insert>
+	
+	<update id="update">
+		update zhunneng_2019plan set name = #{name},amount = #{amount},
+		content = #{content},manager = #{manager},dept_id = #{dept_id}
+		where id = #{id}
+	</update>
+	
+	<delete id="batchDelete">
+		delete from zhunneng_2019plan where id in (${ids})
+	</delete>
+</mapper>
