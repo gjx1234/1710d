@@ -47,14 +47,14 @@ public class StringUtil {
 	//验证
 	public static boolean inEmail(String str) {
 		//正则表达式
-		String reg_str="\\w+@\\.(com|cn|net|com\\.cn)ss$";
+		String reg_str="\\w+@\\.(com|cn|net|com\\.cn)$";
 		boolean matches = str.matches(reg_str);
 		return matches;
 	}	
 	
 	//判断是否是数字
 	public static boolean isNumber(String str) {
-		String reg_str = "^([1-9][0-9]*)|((([0-9]|([1-9]\\d+))\\.\\d)$";
+		String reg_str = "^([1-9][0-9]*)|((([0-9])|([1-9]\\d+))\\.\\d)$";
 		boolean matches = str.matches(reg_str);
 		return matches;
 	}

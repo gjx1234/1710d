@@ -117,6 +117,10 @@ public class RandomUtil {
 		return buffer.toString();
 	}
 	
+	//随机返回一段文章（至少500个文字）
+	public static String getRandomText() {
+		return getRandomChineseString(500);
+	}
 	//起中文名
 	public static String getRandomChineseName() {
 		String[] surname = { "赵", "钱", "孙", "李", "周", "吴", "郑", "王", "冯", "陈", "褚", "卫", "蒋", "沈", "韩", "杨", "朱", "秦",
@@ -155,6 +159,6 @@ public class RandomUtil {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(getRandomChineseName());
+		System.out.println(getRandomText());
 	}
 }
