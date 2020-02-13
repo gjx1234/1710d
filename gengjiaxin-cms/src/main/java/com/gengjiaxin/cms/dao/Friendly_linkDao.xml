@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gengjiaxin.cms.dao.Friendly_linkDao">
+	<select id="selectLinkes" resultType="Friendly_link">
+		select * from cms_friendly_link
+	</select>
+	
+	<select id="selectLink" resultType="Friendly_link">
+		select * from cms_friendly_link
+		<where>
+			<if test="null!=text and text!=''">
+				and text like '%${text}%'
+			</if>
+		</where>	
+	</select>
+	
+	<insert id="addLink">
+		insert into cms_friendly_link value
+		(default,#{text},#{url},now())
+	</insert>
+	
+	<update id="updateLink">
+		update cms_friendly_link set
+		<if test="text!='' and null!=text">
+			text = #{text},
+		</if>
+		<if test="url!='' and null!=url">
+			url = #{url}
+		</if>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteLink">
+		delete from cms_friendly_link where id = #{id}
+	</delete>
+	
+	<select id="toUpdate" resultType="Friendly_link">
+		select * from cms_friendly_link where id = #{id}	
+	</select>
+</mapper>
