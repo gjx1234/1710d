@@ -15,6 +15,7 @@ import java.util.Date;
 public class DateUtil {
 
 	private static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+	private static SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	//根据生日计算年龄
 	public static int getAgeByBirthday(Date birthday) {
 		//获得日历控件
@@ -77,5 +78,37 @@ public class DateUtil {
 		calendar.set(Calendar.SECOND, 0);
 		//返回设置之后的时间
 		return date;
+	}
+	
+	//获得指定时间之前的事件  例如  获得两小时之前的事件
+	public static String getIntervalDate(long millis) {
+		//获得系统单签时间的毫秒
+		Date date = new Date();
+		long time1 = date.getTime();
+		//获得需要得到的时间的毫秒
+		long time = time1-millis;
+		//通过获得的毫秒得到时间
+		date.setTime(time);
+		//将时间转化为字符串
+		String format = sdf2.format(date);
+		return format;
+	}
+	
+	//通过当前时间获得24小时前的时间
+	public static String getDate24Hour() {
+		//获得系统当前时间
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int minute = calendar.get(Calendar.MINUTE);
+		int second = calendar.get(Calendar.SECOND);
+		
+		calendar.set(year, month, day-1, minute, second);
+		Date date = calendar.getTime();
+		String format = sdf2.format(date);
+		return format;
+		
 	}
 }
