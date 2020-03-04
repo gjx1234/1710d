@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gengjiaxin.cms.dao.CollectionDao">
+	<select id="collections" resultType="Collections">
+		select * from cms_collection where user_id = #{id} GROUP BY created desc
+	</select>
+	<insert id="addCollection">
+		insert into cms_collection value(default,#{text},#{url},#{user_id},now())
+	</insert>
+	<delete id="deleteCollection">
+		delete from cms_collection where id = #{id}
+	</delete>
+</mapper>

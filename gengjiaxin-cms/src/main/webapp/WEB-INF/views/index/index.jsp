@@ -113,11 +113,12 @@
 						</ul>
 					</div>
 					<ul>
-							<li style="float:left;margin:8px;margin-right:10px">友情链接</li>
-							<c:forEach items="${links}" var="link">
-								<li style="float:left;margin:8px;margin-right:10px"><a href="${link.url}">${link.text}</a></li>
-							</c:forEach>
-						</ul>
+						<li style="float: left; margin: 8px; margin-right: 10px">友情链接</li>
+						<c:forEach items="${links}" var="link">
+							<li style="float: left; margin: 8px; margin-right: 10px"><a
+								href="${link.url}">${link.text}</a></li>
+						</c:forEach>
+					</ul>
 				</c:if>
 				<!-- 选择了栏目  只显示栏目下的 文章 和分类-->
 				<c:if test="${article.channel_id!=null}">

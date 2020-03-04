@@ -23,6 +23,31 @@
 	function goPage(pageNum) {
 		location = "/indexs/select?pageNum=" + pageNum + "&&id=" + ${article.id};
 	}
+	
+	function collect(text){
+		//判断用户有没有登录
+		//没有登录去登录页面
+		var user='${sessionScope.user}';
+		if(user==""){
+			location.href="/user/login";
+		}else{
+			//获得收藏夹地址  当前页面访问地址
+			var url = window.location.href;
+			$.post(
+				"/user/addCollection",
+				{text:text,url:url},
+				function(msg){
+					if(msg=="-1"){
+						alert("url不合法！");
+					}else if(msg=="0"){
+						alert("收藏失败,请重试");
+					}else{
+						alert("收藏成功");
+					}
+				}
+			)
+		}
+	}
 </script>
 </head>
 <body>
@@ -43,6 +68,7 @@
 					<h2>${article.title}</h2>
 					<span>${article.user.username} &nbsp;&nbsp;&nbsp;&nbsp;<fmt:formatDate
 							value="${article.created}" pattern="yyyy-MM-dd" /></span>
+							<div style="width:800px">${article.content}</div>
 				</div>
 
 				<div>
@@ -54,6 +80,10 @@
 						<input type="submit" value="发布">
 					</form>
 				</div>
+				<br>
+				<div>
+					<button type="button" onclick="collect('${article.title}')">收藏</button>
+				</div>
 
 
 				<!-- 评论 -->
@@ -63,7 +93,7 @@
 							<c:forEach items="${contents}" var="c">
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">${c.user.username}&nbsp;&nbsp;&nbsp;&nbsp;<fmt:formatDate
-											value="${c.created}" pattern="yyyy-MM-dd" /> <br>${c.content}
+											value="${c.created}" pattern="yyyy-MM-dd" /> <br>
 									</li>
 								</ul>
 							</c:forEach>
@@ -87,7 +117,7 @@
 						<c:forEach items="${articles}" var="a">
 							<li class="list-group-item"><a
 								href="javascript:look(${a.id})">${a.title}&nbsp;&nbsp;&nbsp;&nbsp;<fmt:formatDate
-										value="${a.created}" pattern="yyyy-MM-dd" /></a> <br>${a.content}
+										value="${a.created}" pattern="yyyy-MM-dd" /></a> <br>
 							</li>
 						</c:forEach>
 					</ul>

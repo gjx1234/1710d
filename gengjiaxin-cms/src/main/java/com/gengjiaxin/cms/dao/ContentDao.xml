@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="getRandomContents">
 		insert into cms_content values
 		<foreach collection="list" separator="," item="t">
-			(default,#{t.user_id},#{t.article_id},#{t.content},now())
+			(default,#{t.user_id},#{t.article_id},#{t.content},#{t.created})
 		</foreach>
 	</insert>
 </mapper>	

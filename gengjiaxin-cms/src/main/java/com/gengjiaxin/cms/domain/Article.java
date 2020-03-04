@@ -2,6 +2,7 @@ package com.gengjiaxin.cms.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -50,9 +51,17 @@ public class Article implements Serializable{
 	
 	private Integer readCount;
 	
+	private List<Pictures> pictures;
+	
 	
 	public Integer getReadCount() {
 		return readCount;
+	}
+	public List<Pictures> getPictures() {
+		return pictures;
+	}
+	public void setPictures(List<Pictures> pictures) {
+		this.pictures = pictures;
 	}
 	public void setReadCount(Integer readCount) {
 		this.readCount = readCount;

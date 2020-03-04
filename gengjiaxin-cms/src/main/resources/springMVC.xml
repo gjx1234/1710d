@@ -23,13 +23,6 @@
 		<property name="prefix" value="/WEB-INF/views/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
-	<!-- 不拦截静态资源 -->
-
-	<mvc:resources location="/" mapping="/**/*.js" />
-	<mvc:resources location="/" mapping="/**/*.css" />
-	<mvc:resources location="/assets/" mapping="/assets/**/*" />
-	<mvc:resources location="/images/" mapping="/images/*"
-		cache-period="360000" />
 
 	<!-- 文件解析器 -->
 
@@ -40,56 +33,30 @@
 		<property name="maxInMemorySize" value="2048" />   <!-- 读取文件到内存中最大的字节数 -->
 		<property name="defaultEncoding" value="UTF-8" />  <!-- 默认编码 -->
 	</bean>
-	<!-- 自定义拦截器 -->
+	<!-- 配置拦截器 -->
 	<mvc:interceptors>
+		<!--个人中心/后台管理员登录的拦截器 -->
 		<mvc:interceptor>
-			<!-- 拦截的请求地址 -->
-			<mvc:mapping path="/**" />
-			<!-- 设置放行地址 -->
-			<mvc:exclude-mapping path="/index" />
-			<mvc:exclude-mapping path="/my" />
-			<mvc:exclude-mapping path="/admin" />
-			<mvc:exclude-mapping path="/indexs/select" />
-
-			<mvc:exclude-mapping path="/user/login" />
-			<mvc:exclude-mapping path="/user/advice" />
-			<mvc:exclude-mapping path="/user/register" />
-			<mvc:exclude-mapping path="/user/selects" />
-			<mvc:exclude-mapping path="/user/logout" />
-			<mvc:exclude-mapping path="/user/selectOne" />
-			<mvc:exclude-mapping path="/user/updateUser" />
-	
-			<mvc:exclude-mapping path="/article/selectsByAdmin" />
-			<mvc:exclude-mapping path="/article/toAdd" />
-			<mvc:exclude-mapping path="/article/addArticle" />
-			<mvc:exclude-mapping path="/article/selectsCategory" />
-			<mvc:exclude-mapping path="/article/selectsChannel" />
-			<mvc:exclude-mapping path="/article/selectArticle" />
-			<mvc:exclude-mapping path="/article/add" />
-			<mvc:exclude-mapping path="/article/toAdd" />
-			<mvc:exclude-mapping path="/article/select" />
-			<mvc:exclude-mapping path="/article/updateArcitle" />
-			
-
-			<mvc:exclude-mapping path="/link/selects" />
-			<mvc:exclude-mapping path="/link/toAdd" />
-			<mvc:exclude-mapping path="/link/addLink" />
-			<mvc:exclude-mapping path="/link/deleteLink" />
-			<mvc:exclude-mapping path="/link/toUpdate" />
-			<mvc:exclude-mapping path="/link/updateLink" />
-
-
-			<mvc:exclude-mapping path="/**/fonts/*" />
-			<mvc:exclude-mapping path="/**/*.css" />
-			<mvc:exclude-mapping path="/**/**/*.css" />
-			<mvc:exclude-mapping path="/**/*.js" />
-			<mvc:exclude-mapping path="/**/*.png" />
-			<mvc:exclude-mapping path="/**/*.gif" />
-			<mvc:exclude-mapping path="/**/*.jpg" />
-			<mvc:exclude-mapping path="/**/*.jpeg" />
-			<!-- 自定义的拦截器的类 -->
+			<mvc:mapping path="/my" />
+			<mvc:mapping path="/admin" />
 			<bean class="com.gengjiaxin.cms.interceptor.MyInterceptor"></bean>
 		</mvc:interceptor>
+		<!-- 各个方法执行时间的拦截器 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/index" />
+			<bean class="com.gengjiaxin.cms.interceptor.TimeInterceptor"></bean>
+		</mvc:interceptor>
 	</mvc:interceptors>
+
+	<!-- 不拦截静态资源 -->
+	<mvc:default-servlet-handler />
+	<!-- mvc注解驱动 -->
+	<mvc:annotation-driven validator="validator"></mvc:annotation-driven>
+	<!-- hibernate 表单校验 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass"
+			value="org.hibernate.validator.HibernateValidator"></property>
+	</bean>
 
 </beans>

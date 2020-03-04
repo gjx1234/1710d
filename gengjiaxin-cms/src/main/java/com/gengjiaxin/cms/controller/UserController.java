@@ -1,5 +1,7 @@
 package com.gengjiaxin.cms.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -12,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.gengjiaxin.cms.domain.Article;
+import com.gengjiaxin.cms.domain.Collections;
 import com.gengjiaxin.cms.domain.Content;
 import com.gengjiaxin.cms.domain.User;
+import com.gengjiaxin.cms.exception.CMSRuntimeException;
 import com.gengjiaxin.cms.service.ArticleService;
+import com.gengjiaxin.cms.service.CollectionService;
 import com.gengjiaxin.cms.service.UserService;
 import com.gengjiaxin.cms.utils.CMSJsonUtil;
 import com.gengjiaxin.cms.vo.UserVO;
@@ -31,6 +35,9 @@ public class UserController {
 
 	@Autowired
 	private ArticleService articleService;
+
+	@Autowired
+	private CollectionService collectionService;
 
 	@RequestMapping("selects")
 	public String getUserList(Model m, String username, @RequestParam(defaultValue = "1") Integer pageNum,
@@ -181,29 +188,76 @@ public class UserController {
 		}
 		return "index/login";
 	}
-	
-	//查找个人信息
+
+	// 查找个人信息
 	@RequestMapping("selectOne")
-	public String selectOne(Model model,HttpSession session) {
+	public String selectOne(Model model, HttpSession session) {
 		if (session.getAttribute("user") != null) {
 			User user = (User) session.getAttribute("user");
 			User userMessage = userService.getOne(user.getId());
-			model.addAttribute("user",userMessage);
+			model.addAttribute("user", userMessage);
 			return "my/message";
 		}
 		return "index/login";
 	}
-	
-	//完善个人信息
+
+	// 完善个人信息
+	@ResponseBody
 	@RequestMapping("updateUser")
-	public String updateUser(User user) {
+	public boolean updateUser(User user) {
 		System.out.println(user.toString());
 		int result = userService.updateUser(user);
-		if(result>0) {
-			return "redirect:/my";
-		}else {
-			return "redirect:/my/selectOne";
+		if (result > 0) {
+			return true;
+		} else {
+			return false;
 		}
 	}
-	
+
+	// 查看个人收藏
+	@RequestMapping("selectCollections")
+	public String selectCollections(HttpSession session, @RequestParam(defaultValue = "1") Integer pageNum,
+			@RequestParam(defaultValue = "5") Integer pageSize, Model model) {
+		User user = (User) session.getAttribute("user");
+		if (user != null) {
+			PageInfo<Collections> collections = collectionService.collections(user, pageNum, pageSize);
+			List<Collections> list = collections.getList();
+			model.addAttribute("list", list);
+			model.addAttribute("info", collections);
+			return "my/collections";
+		} else {
+			return "index/login";
+		}
+	}
+
+	// 删除个人收藏
+	@RequestMapping("deleteCollection")
+	public String deleteCollection(Collections collection) {
+		int result = collectionService.deleteCollection(collection);
+		if (result > 0) {
+			return "redirect:/my";
+		}
+		return "redirect:/my";
+	}
+
+	// 增加个人收藏
+	@ResponseBody
+	@RequestMapping("addCollection")
+	public Integer addCollection(Collections collection, HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		System.out.println(collection.toString());
+		if (user != null) {
+			collection.setUser_id(user.getId());
+			System.out.println(collection.toString());
+		}
+		int i = 0;
+		i = collectionService.addCollection(collection);
+		if (i == -1) {
+			CMSRuntimeException e = new CMSRuntimeException();
+			e.getMessage();// 打印异常的信息
+			e.printStackTrace();
+		}
+		return i;
+	}
+
 }

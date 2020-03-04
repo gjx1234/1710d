@@ -19,9 +19,9 @@ import com.gengjiaxin.cms.domain.User;
 import com.gengjiaxin.cms.service.ArticleService;
 import com.gengjiaxin.cms.service.CategoryService;
 import com.gengjiaxin.cms.service.ChannelService;
+import com.gengjiaxin.cms.service.CollectionService;
 import com.gengjiaxin.cms.service.Friendly_linkService;
 import com.gengjiaxin.cms.service.SlideService;
-import com.gengjiaxin.cms.utils.CMSJsonUtil;
 import com.github.pagehelper.PageInfo;
 
 @Controller
@@ -41,7 +41,7 @@ public class AdminController {
 	
 	@Autowired
 	private Friendly_linkService linkService;
-
+	
 	// 后台
 	@RequestMapping("admin")
 	public String index(HttpSession session) {

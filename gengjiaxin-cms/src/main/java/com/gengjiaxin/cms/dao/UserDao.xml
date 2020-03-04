@@ -5,16 +5,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.gengjiaxin.cms.dao.UserDao">
 	<!-- 高级映射 -->
 	<resultMap type="User" id="userMap">
-		<id column="id" property="id"/>
-		<result column="username" property="username"/>
-		<result column="password" property="password"/>
-		<result column="birthday" property="birthday"/>
-		<!-- 性别在枚举中是int类型 数据库中是 下标     实体类中是string类型 -->
-		<result column="gender" property="gender" 
-		javaType="com.gengjiaxin.cms.domain.Genders.Gender"
-		typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
-		<result column="created" property="created"/>
-		<result column="locked" property="locked"/>
+		<id column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="birthday" property="birthday" />
+		<!-- 性别在枚举中是int类型 数据库中是 下标 实体类中是string类型 -->
+		<result column="gender" property="gender"
+			javaType="com.gengjiaxin.cms.domain.Genders.Gender"
+			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+		<result column="created" property="created" />
+		<result column="locked" property="locked" />
 	</resultMap>
 	<!-- sql片段 -->
 	<sql id="user_column">
@@ -22,29 +22,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</sql>
 	<!-- 查询用户列表+模糊查询 -->
 	<select id="getUserList" resultMap="userMap">
-		select <include refid="user_column"/> from cms_user
+		select
+		<include refid="user_column" />
+		from cms_user
 		<where>
 			<if test="null!=username and username!=''">
 				and username like '%${username}%'
 			</if>
 		</where>
 	</select>
-	
-	<!-- 用户是否禁用  修改状态-->
+
+	<!-- 用户是否禁用 修改状态 -->
 	<update id="updateLocked">
-		update cms_user set locked = #{locked} where id = #{id}
+		update cms_user set locked = #{locked} where id =
+		#{id}
 	</update>
-	
+
 	<!-- 查询单个用户 -->
 	<select id="getOne" resultMap="userMap">
-		select <include refid="user_column"/> from cms_user where id = #{id}
+		select
+		<include refid="user_column" />
+		from cms_user where id = #{id}
 	</select>
-	
+
 	<!-- 查询此用户名在数据库中是否存在 -->
 	<select id="getCountByUserName" resultType="Integer">
-		select count(*) from cms_user where username = #{username}
+		select count(*) from
+		cms_user where username = #{username}
 	</select>
-	
+
 	<!-- 注册添加 -->
 	<insert id="addUser">
 		insert into cms_user
@@ -63,36 +69,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</set>
 	</insert>
-	
+
 	<!-- 登录 -->
 	<select id="login" resultMap="userMap">
-		select * from cms_user where username = #{username}
+		select * from cms_user where
+		username = #{username}
 	</select>
-	
+
 	<insert id="advice">
-		insert into cms_content values (null,#{user.id},#{article.id},#{content},now())
+		insert into cms_content values
+		(null,#{user.id},#{article.id},#{content},now())
 	</insert>
-	
+
 	<select id="getIds" resultType="Integer">
 		select id from cms_user
 	</select>
-	
+
 	<update id="updateUser">
 		update cms_user set
-		<where>
-			<if test="null!=username and username!=''">
-				username = #{username},
-			</if>
-			<if test="null!=nickname and nickname!=''">
-				nickname = #{nickname},
-			</if>
-			<if test="null!=birthday and birthday!=''">
-				birthday = #{birthday},
-			</if>
-			<if test="null!=gender and gender!=''">
-				gender = #{gender.ordinal}
-			</if>
-			where id = #{id}
-		</where>
+		<if test="null!=username and username!=''">
+			username = #{username},
+		</if>
+		<if test="null!=nickname and nickname!=''">
+			nickname = #{nickname},
+		</if>
+		where id = #{id}
 	</update>
 </mapper>

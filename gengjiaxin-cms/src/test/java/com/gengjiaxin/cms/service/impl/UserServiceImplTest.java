@@ -1,6 +1,8 @@
 package com.gengjiaxin.cms.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -30,13 +32,13 @@ public class UserServiceImplTest {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private ContentService contentService;
-	
+
 	@Autowired
 	private ArticleService articleService;
-	
+
 	@Test
 	public void testGetUserList() {
 		PageInfo<User> list = userService.getUserList(null, 1, 3);
@@ -104,10 +106,11 @@ public class UserServiceImplTest {
 			if (words[i].indexOf(")") == 0) {
 				words[i] = words[i].substring(1);
 			}
-			if(words[i].contains(",") || words[i].contains(".")) {
-				if ((words[i].indexOf(".") == words[i].length() - 1) || words[i].indexOf(",") == words[i].length() - 1){
+			if (words[i].contains(",") || words[i].contains(".")) {
+				if ((words[i].indexOf(".") == words[i].length() - 1)
+						|| words[i].indexOf(",") == words[i].length() - 1) {
 					words[i] = words[i].substring(0, words[i].length() - 1);
-				}else if(words[i].indexOf(".") == 0 || words[i].indexOf(",") == 0){
+				} else if (words[i].indexOf(".") == 0 || words[i].indexOf(",") == 0) {
 					words[i].substring(1);
 				}
 			}
@@ -121,25 +124,23 @@ public class UserServiceImplTest {
 					}
 				}
 			}
-			
-			}
-		
+
+		}
+
 		Set<Entry<String, Integer>> entrySet = map.entrySet();
 		for (Entry<String, Integer> entry : entrySet) {
 			System.out.println(entry.getKey() + ":" + entry.getValue());
 		}
-		
-		
+
 		System.out.println("打印次数超过三次的单词");
 		for (Entry<String, Integer> entry : entrySet) {
 			if (entry.getValue() >= 3) {
 				System.out.print(entry.getKey() + " ");
 			}
 		}
-		
-		}
-	
-	
+
+	}
+
 	@Test
 	public void aaa() {
 		HashSet<Integer> hashSet = new HashSet<Integer>();
@@ -147,39 +148,47 @@ public class UserServiceImplTest {
 		hashSet.add(2);
 		hashSet.add(3);
 		Iterator it = hashSet.iterator();
-		for(int i=0;i<hashSet.size();i++) {
+		for (int i = 0; i < hashSet.size(); i++) {
 			System.out.println(it.next());
 		}
 	}
+
 	@Test
 	public void testgetRandomContents() {
-		//获取所有的文章id
+		// 获取所有的文章id
 		List<Integer> aids = articleService.getIds();
-		//获取所有的user id
+		// 获取所有的user id
 		List<Integer> uids = userService.getIds();
-		//创建一个list集合存储Content对象
+		// 创建一个list集合存储Content对象
 		List<Content> contents = new ArrayList<Content>();
-		//获取随机数
+		// 获取随机数
 		Random random = new Random();
-		for(int i=0;i<1000;i++) {
-			//循环一千条  评论字数50以内随意字数
+		for (int i = 0; i < 1000; i++) {
+			// 循环一千条 评论字数50以内随意字数
 			String text = RandomUtil.getRandomChineseString(random.nextInt(50));
 			int aid = 0;
 			int uid = 0;
-			//在文章id集合中随机获取其中一个
-			for(int j=0;j<aids.size();j++) {
+			// 在文章id集合中随机获取其中一个
+			for (int j = 0; j < aids.size(); j++) {
 				aid = aids.get(random.nextInt(aids.size()));
 			}
-			//在user id集合中随机获取其中一个
-			for(int j=0;j<uids.size();j++) {
+			// 在user id集合中随机获取其中一个
+			for (int j = 0; j < uids.size(); j++) {
 				uid = uids.get(random.nextInt(uids.size()));
 			}
-			//装载对象
-			Content content = new Content(null, text, aid, uid);
-			//将1000个content对象放入list集合中
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(2019, 0, 1, 0, 0, 0);
+			long time1 = calendar.getTime().getTime();
+			long time2 = new Date().getTime();
+			long time = (long)(Math.random()*(time2-time1))+time1;
+			Date date = new Date(time);
+			// 装载对象
+			Content content = new Content(null, text, aid, uid,date);
+			// 将1000个content对象放入list集合中
 			contents.add(content);
 		}
-		//数据库添加数据
+		// 数据库添加数据
 		contentService.getRandomContents(contents);
 	}
 }

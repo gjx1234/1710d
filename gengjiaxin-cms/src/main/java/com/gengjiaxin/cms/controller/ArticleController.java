@@ -1,11 +1,19 @@
 package com.gengjiaxin.cms.controller;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.gengjiaxin.cms.domain.Article;
 import com.gengjiaxin.cms.domain.Channel;
+import com.gengjiaxin.cms.domain.Pictures;
 import com.gengjiaxin.cms.domain.User;
 import com.gengjiaxin.cms.service.ArticleService;
 import com.github.pagehelper.PageInfo;
@@ -142,4 +152,69 @@ public class ArticleController {
 		}
 	}
 
+	
+	/**
+	 * 
+	 *发布图片
+	 */
+	
+	@RequestMapping("toAddPicture")
+	public String toAddPicture() {
+		return "my/publishPicture";
+	}
+	
+	@RequestMapping("addPictures")
+	public String addPictures(MultipartFile file,HttpServletResponse response,HttpServletRequest request
+			,Pictures picture) throws Exception {
+		List<Article> articles = new ArrayList<Article>();
+		response.setContentType("text/html");
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		List p = null;
+		try {
+			p = upload.parseRequest(request);
+		} catch (FileUploadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator iterator = p.iterator();
+		String desc1 = null;
+		String desc2 = null;
+		String desc3 = null;
+		Article article = null;
+		while(iterator.hasNext()) {
+			FileItem item = (FileItem) iterator.next();
+			if(item.isFormField()) {
+				String value = item.getString("utf-8");
+				if(item.getFieldName().equals("desc1")) {
+					desc1 = value;
+					picture.setDesc(desc1);
+				}else if(item.getFieldName().equals("desc2")) {
+					picture.setDesc(desc2);
+					desc2 = value;
+				}else if(item.getFieldName().equals("desc3")) {
+					picture.setDesc(desc3);
+					desc2 = value;
+				}
+			}else {//图片格式
+				String path = "d:/pic/";
+				String fieldname = item.getFieldName();
+				String filename = item.getName();
+				// 获得后缀
+				String hz = filename.substring(filename.lastIndexOf("."));
+				// 获得新的文件的名称
+				String newFileName = UUID.randomUUID().toString() + hz;
+				// 创建上传的文件
+				File fiel2 = new File(path + newFileName);
+				file.transferTo(fiel2);
+				picture.setUrl(newFileName);
+			}
+			String jsonString = JSON.toJSONString(picture);
+			article = new Article();
+			article.setContent(jsonString);
+		}
+		articles.add(article);
+		articleService.add(article);
+		return "redirect:/index";
+	}
 }

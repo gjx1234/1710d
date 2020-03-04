@@ -98,6 +98,16 @@ public class Content {
 		this.user_id = user_id;
 	}
 
+	
+	public Content(Integer id, String content, Integer article_id, Integer user_id, Date created) {
+		super();
+		this.id = id;
+		this.content = content;
+		this.article_id = article_id;
+		this.user_id = user_id;
+		this.created = created;
+	}
+
 	@Override
 	public String toString() {
 		return "Content [id=" + id + ", user=" + user + ", article=" + article + ", content=" + content

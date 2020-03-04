@@ -12,13 +12,7 @@
 <script type="text/javascript" src="/resource/js/bootstrap.min.js"></script>
 </head>
 <script type="text/javascript">
-	function goPage(pageNum) {
-		var url = "/article/selectArticle?pageNum=" + pageNum;
-		$("#center").empty();
-		$("#center").load(url);
-	}
 	$(function() {
-
 		$("#link a").click(function() {
 			var url = $(this).attr("data");
 			$("#center").empty();
@@ -60,8 +54,10 @@
 				<nav class="nav flex-column">
 					<a class="list-group-item active" href="#"
 						data="/article/selectArticle">查看文章</a> <a class="list-group-item "
-						href="javascript:void(0)" data="/article/toAdd">发布文章</a> <a
+						href="javascript:void(0)" data="/article/toAdd">发布文章</a>
+						<a class="list-group-item "	href="javascript:void(0)" data="/article/toAddPicture">发布图片</a> <a
 						class="list-group-item " href="#" data="/user/selectOne">资料管理</a>
+					<a class="list-group-item " href="#" data="/user/selectCollections">个人收藏</a>
 					<a class="list-group-item " href="#" data="/article/addArticle">其他管理</a>
 
 				</nav>
