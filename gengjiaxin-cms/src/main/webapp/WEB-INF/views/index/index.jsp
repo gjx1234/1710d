@@ -57,6 +57,19 @@
 
 			<!--  middle-->
 			<div class="col-md-7 split" id="article">
+
+				<!-- 搜索框 -->
+				<form action="/search" method="get">
+					<div class="input-group mb-3">
+						<input type="text" name="key" value="${key}" class="form-control"
+							placeholder="请输入要搜索的内容" aria-label="Recipient's username"
+							aria-describedby="button-addon2">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary" id="button-addon2">搜索</button>
+						</div>
+					</div>
+				</form>
+
 				<!-- 第一次进入 没有选择栏目  默认显示轮播图和热门文章 -->
 				<c:if test="${article.channel_id==null}">
 
@@ -119,6 +132,7 @@
 								href="${link.url}">${link.text}</a></li>
 						</c:forEach>
 					</ul>
+					
 				</c:if>
 				<!-- 选择了栏目  只显示栏目下的 文章 和分类-->
 				<c:if test="${article.channel_id!=null}">
@@ -139,24 +153,45 @@
 					<hr>
 
 					<div id="article">
+
 						<ul class="list-unstyled">
 							<c:forEach items="${info.list }" var="a">
 								<li class="media"><img src="/pic/${a.picture }"
 									class="mr-3" alt="..." width="160px" height="100px">
 									<div class="media-body text-center">
 										<h5 class="mt-0 mb-1 ">
-											<a href="/indexs/select?id=${a.id }" onclick="look(${a.id})"
+											<a href="/selectar?id=${a.id }" onclick="look(${a.id})"
 												style="font-size: 15px;" data-target="#exampleModal">${a.title }</a>
 										</h5>
 										<br> ${a.user.username }&nbsp;&nbsp;&nbsp;
 										<fmt:formatDate value="${a.created }" pattern="yyyy-MM-dd" />
 									</div></li>
 								<hr>
+
 							</c:forEach>
 						</ul>
+
 					</div>
+
 				</c:if>
 
+				<div id="article">
+					<ul class="list-unstyled">
+						<c:forEach items="${list }" var="a">
+							<li class="media"><img src="/pic/${a.picture }" class="mr-3"
+								alt="..." width="160px" height="100px">
+								<div class="media-body text-center">
+									<h5 class="mt-0 mb-1 ">
+										<a href="/indexs/select?id=${a.id }" onclick="look(${a.id})"
+											style="font-size: 15px;" data-target="#exampleModal">${a.title }</a>
+									</h5>
+									<br> ${a.user.username }&nbsp;&nbsp;&nbsp;
+									<fmt:formatDate value="${a.created }" pattern="yyyy-MM-dd" />
+								</div></li>
+							<hr>
+						</c:forEach>
+					</ul>
+				</div>
 
 			</div>
 			<!-- middle_right-->
@@ -173,30 +208,13 @@
 			</div>
 
 		</div>
-
-	</div>
-
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel"></h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">...</div>
-				<div class="modal-footer">
-					<button type="button" name="id" class="btn btn-success"
-						data-dismiss="modal" onclick="changeStatus(1,this)">通过</button>
-					<button type="button" name="id" class="btn btn-primary"
-						onclick="changeStatus(-1,this)">不通过</button>
-				</div>
-			</div>
+		<div style="margin-left:800px">
+			<!-- 这是一个最简单的分页 -->
+			<a
+				href="search?key=${key }&pageNum=${pageInfo.pageNum>1?pageInfo.pageNum-1:pageInfo.pageNum}">上一页</a> <a
+				href="search?key=${key }&pageNum=${pageInfo.pageNum==pageInfo.pages?pageInfo.pageNum:pageInfo.pageNum+1 }">下一页</a>
 		</div>
 	</div>
+
 </body>
 </html>

@@ -4,8 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Document(indexName = "cms_article",type="article")
 public class Article implements Serializable{
 
 	/**
@@ -15,10 +20,11 @@ public class Article implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Id
 	private Integer id;
-	
+	@Field(index=true,store=true,analyzer="ik_max_word",searchAnalyzer="ik_max_word",type=FieldType.text)
 	private String title;
-	
+	@Field(index=true,store=true,analyzer="ik_max_word",searchAnalyzer="ik_max_word",type=FieldType.text)
 	private String content;
 	
 	private String picture;
@@ -31,14 +37,14 @@ public class Article implements Serializable{
 	
 	private Integer userId;
 	
+	private Integer hits;
+	
 	public Integer getUserId() {
 		return userId;
 	}
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	private Integer hits;
-	
 	private Integer hot;
 	
 	private Integer status;

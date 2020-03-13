@@ -15,6 +15,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
+import com.gengjiaxin.cms.dao.ArticleRepository;
 import com.gengjiaxin.cms.domain.Article;
 import com.gengjiaxin.cms.domain.Channel;
 import com.gengjiaxin.cms.domain.Pictures;
@@ -36,6 +38,12 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	@Autowired
+	ArticleRepository articleRepository;
+	
+	@Autowired
+	KafkaTemplate kafkaTemplate;
 
 	/**
 	 * 
@@ -62,6 +70,11 @@ public class ArticleController {
 	@ResponseBody
 	@RequestMapping("updateArcitle")
 	public boolean update(Article article) {
+		/*
+		 * Article articleUpdate = articleService.select(article.getId());
+		 * articleRepository.save(articleUpdate);
+		 */
+		kafkaTemplate.send("cms_articles", "check="+"="+article.getId());
 		return articleService.update(article);
 	}
 

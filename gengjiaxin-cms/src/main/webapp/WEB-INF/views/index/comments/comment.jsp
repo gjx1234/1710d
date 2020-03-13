@@ -93,7 +93,7 @@
 							<c:forEach items="${contents}" var="c">
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">${c.user.username}&nbsp;&nbsp;&nbsp;&nbsp;<fmt:formatDate
-											value="${c.created}" pattern="yyyy-MM-dd" /> <br>
+											value="${c.created}" pattern="yyyy-MM-dd" /> <br>${c.content}
 									</li>
 								</ul>
 							</c:forEach>
@@ -110,7 +110,7 @@
 
 			<!-- 相关文章 -->
 
-			<div class="col-md-3 split min_h_500" style="float: left;margin-left:350px">
+			<div class="col-md-3 split min_h_500" style="float: left;margin-left:200px">
 				<div class="card" style="width: 18rem;">
 					<div class="card-header">相关文章</div>
 					<ul class="list-group list-group-flush">

@@ -81,4 +81,9 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleDao.getIds();
 	}
 
+	@Override
+	public void updateHit(Article article1) {
+		articleDao.updateHit(article1);
+	}
+
 }

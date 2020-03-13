@@ -31,5 +31,7 @@ public interface ArticleDao {
 	public List<Article> selectArticesContected(Article article1);
 
 	public List<Integer> getIds();
+
+	public void updateHit(Article article1);
 	
 }

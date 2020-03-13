@@ -157,4 +157,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getIds" resultType="Integer">
 		select id from cms_article
 	</select>
+	
+	<update id="updateHit">
+		update cms_article set hits = #{hits} where id = #{id}
+	</update>
 </mapper>
